@@ -1,10 +1,10 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
-export default function SplashScreen() {
+export default function AboutMeScreen() {
   return (
     <View>
-      <Text></Text>
+      <Text>About Me</Text>
     </View>
   );
 }

@@ -2,32 +2,34 @@ import React, {useState, useEffect} from 'react';
 import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import {Separator} from '../components/Separator';
+import {LoadingIndicatorView} from '../components/LoadingIndicatorView';
 
 export default function HomeScreen(props) {
   const [posts, setPosts] = useState([]);
 
-  useEffect(() => {
-    async function getTopStories() {
-      const tops = 'https://hacker-news.firebaseio.com/v0/topstories.json';
-      try {
-        const response = await fetch(tops);
-        if (response.ok === false) {
-          throw new Error(`Response Error: ${response}`);
-        }
-        const json = await response.json();
-        const promises = json
-          .slice(0, 15)
-          .map(id =>
-            fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json`).then(
-              response => response.json(),
-            ),
-          );
-        const result = await Promise.all(promises);
-        setPosts(result);
-      } catch (error) {
-        console.error(error);
+  const getTopStories = async () => {
+    const tops = 'https://hacker-news.firebaseio.com/v0/topstories.json';
+    try {
+      const response = await fetch(tops);
+      if (response.ok === false) {
+        throw new Error(`Response Error: ${response}`);
       }
+      const json = await response.json();
+      const promises = json
+        .slice(0, 20)
+        .map(id =>
+          fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json`).then(
+            response => response.json(),
+          ),
+        );
+      const result = await Promise.all(promises);
+      setPosts(result);
+    } catch (error) {
+      console.error(error);
     }
+  };
+
+  useEffect(() => {
     getTopStories();
   }, []);
 
@@ -37,7 +39,7 @@ export default function HomeScreen(props) {
   return (
     <FlatList
       data={posts}
-      keyExtractor={(item, index) => item.id}
+      keyExtractor={item => item.id}
       ItemSeparatorComponent={Separator}
       renderItem={postInfo => (
         <TouchableOpacity
@@ -56,7 +58,7 @@ export default function HomeScreen(props) {
 
 const styles = StyleSheet.create({
   listItem: {
-    paddingVertical: 7,
+    paddingVertical: 12,
     paddingHorizontal: 20,
   },
   sub: {
