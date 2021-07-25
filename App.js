@@ -8,6 +8,7 @@ import ArticleScreen from './src/screens/ArticleScreen';
 import SplashScreen from './src/screens/SplashScreen';
 
 import CustomNava from './src/components/CustomNava';
+import LoginScreen from './src/screens/LoginScreen';
 
 const Stack = createStackNavigator();
 
@@ -15,6 +16,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator
+        initialRouteName="Home"
         screenOptions={{
           headerStyle: {
             backgroundColor: '#f4511e',
@@ -28,6 +30,13 @@ export default function App() {
           },
           headerTitleAlign: 'center',
         }}>
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
         <Stack.Screen
           name="Home"
           component={HomeScreen}
