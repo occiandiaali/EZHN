@@ -8,7 +8,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 export default function CustomNava({name, size, onPress}) {
   const linkTo = useLinkTo();
   return (
-    <TouchableOpacity onPress={() => linkTo('/About')}>
+    <TouchableOpacity onPress={() => linkTo('/Login')}>
       <Icon style={{paddingRight: 25}} name={name} color="white" size={size} />
     </TouchableOpacity>
   );
