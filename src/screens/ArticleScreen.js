@@ -1,32 +1,29 @@
 import React, {useState, useEffect} from 'react';
 
-import {ActivityIndicator, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 
 import {WebView} from 'react-native-webview';
-
-const LoadingIndicatorView = () => (
-  <ActivityIndicator
-    color="#ff0000"
-    size="large"
-    style={styles.ActivityIndicatorStyle}
-  />
-);
+import FourZeroFour from '../components/FourZeroFour';
+import {LoadingIndicatorView} from '../components/LoadingIndicatorView';
 
 const ArticleScreen = props => {
   const [article, setArticle] = useState('');
 
+  console.log(`URL: ${article.url}`);
   useEffect(() => {
     const article = props.route.params.article;
     setArticle(article);
   }, []);
 
-  return (
+  return article.url !== undefined ? (
     <WebView
       originWhitelist={['*']}
       renderLoading={LoadingIndicatorView}
       source={{uri: article.url}}
       startInLoadingState={true}
     />
+  ) : (
+    <FourZeroFour />
   );
 };
 
