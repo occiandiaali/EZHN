@@ -89,6 +89,8 @@ export default function HomeScreen(props) {
       data={posts}
       keyExtractor={item => item.id}
       ItemSeparatorComponent={Separator}
+      showsVerticalScrollIndicator={false}
+      showsHorizontalScrollIndicator={false}
       renderItem={postInfo =>
         postInfo.item.id !== null ? (
           <TouchableOpacity
