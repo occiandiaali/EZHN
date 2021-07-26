@@ -9,6 +9,7 @@ import SplashScreen from './src/screens/SplashScreen';
 
 import CustomNava from './src/components/CustomNava';
 import LoginScreen from './src/screens/LoginScreen';
+import SettingsScreen from './src/screens/SettingsScreen';
 
 const Stack = createStackNavigator();
 
@@ -34,7 +35,7 @@ export default function App() {
           name="Login"
           component={LoginScreen}
           options={{
-            headerShown: false,
+            title: 'Accounts',
           }}
         />
         <Stack.Screen
@@ -42,7 +43,7 @@ export default function App() {
           component={HomeScreen}
           options={{
             title: 'Easy Hacker News',
-            headerRight: () => <CustomNava name="menu" size={30} />,
+            headerRight: () => <CustomNava />,
           }}
         />
         <Stack.Screen
@@ -63,6 +64,11 @@ export default function App() {
           name="Splash"
           component={SplashScreen}
           options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Settings"
+          component={SettingsScreen}
+          options={{title: 'Settings'}}
         />
       </Stack.Navigator>
     </NavigationContainer>
