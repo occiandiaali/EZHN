@@ -16,7 +16,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Home"
+        initialRouteName="Splash"
         screenOptions={{
           headerStyle: {
             backgroundColor: '#f4511e',
@@ -59,7 +59,11 @@ export default function App() {
             headerTitle: route.params.article.title,
           })}
         />
-        <Stack.Screen name="Splash" component={SplashScreen} options={{}} />
+        <Stack.Screen
+          name="Splash"
+          component={SplashScreen}
+          options={{headerShown: false}}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
