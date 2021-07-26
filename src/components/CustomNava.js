@@ -9,7 +9,7 @@ export default function CustomNava({name, size, onPress}) {
   const linkTo = useLinkTo();
   return (
     <TouchableOpacity onPress={() => linkTo('/Login')}>
-      <Icon style={{paddingRight: 25}} name={name} color="white" size={size} />
+      <Icon style={{paddingRight: 25}} name={name} color="black" size={size} />
     </TouchableOpacity>
   );
 }
