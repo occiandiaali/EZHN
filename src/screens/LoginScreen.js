@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   TextInput,
@@ -16,27 +16,114 @@ import {openDatabase} from 'react-native-sqlite-storage';
 import LoginComponent from '../components/LoginComponent';
 import Mybutton from '../components/Mybutton';
 
-//const db = openDatabase({name: 'UserDB.db'});
-
-export default function LoginScreen() {
+export default function LoginScreen({navigation}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isAuth, setIsAuth] = useState(false);
+  // const [firstname, setFirstname] = useState('');
+  // const [lastname, setLastname] = useState('');
   const [isModalVisible, setModalVisible] = useState(false);
   const showModal = () => setModalVisible(true);
   const hideModal = () => setModalVisible(false);
   const containerStyle = {
     width: '100%',
-    height: '60%',
+    height: '70%',
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
     padding: 25,
   };
 
-  const reg_user = () => {
-    if (!email || !password) {
+  // open database
+  const db = openDatabase(
+    {
+      name: 'UserDB.db',
+      location: 'default',
+    },
+    () => {},
+    error => {
+      console.log(error);
+    },
+  );
+
+  const createTable = () => {
+    db.transaction(tx => {
+      tx.executeSql(
+        'CREATE TABLE IF NOT EXISTS ' +
+          'Users ' +
+          '(ID INTEGER PRIMARY KEY AUTOINCREMENT, Email TEXT, Password TEXT);',
+      );
+    });
+  };
+
+  useEffect(() => {
+    createTable();
+  }, []);
+
+  const regUser = async () => {
+    if (!email && !password) {
       Alert.alert('Fields required', 'We need ALL fields!');
       return;
+    }
+
+    await db.transaction(tx => {
+      tx.executeSql(
+        'INSERT INTO Users (Email, Password) VALUES (?, ?)',
+        [email, password],
+        (tx, results) => {
+          if (results.rowsAffected > 0) {
+            setEmail(email);
+            setPassword(password);
+            // setFirstname(firstname);
+            // setLastname(lastname);
+            Alert.alert(
+              'Success',
+              'You are now registered!',
+              [
+                {
+                  text: 'Nice',
+                  onPress: () =>
+                    navigation.navigate('Home', {
+                      user_email: email,
+                      // user_firstname: firstname,
+                      // user_lastname: lastname,
+                    }),
+                },
+              ],
+              {cancelable: false},
+            );
+          } else {
+            Alert.alert('Failed', 'Could not register you!');
+          }
+        },
+      );
+    });
+  };
+
+  const loginUser = () => {
+    if (!email && !password) {
+      Alert.alert('Attention', 'Complete ALL fields!');
+      return;
+    }
+    try {
+      db.transaction(tx => {
+        tx.executeSql(
+          'SELECT Email, Password FROM Users',
+          [],
+          (tx, results) => {
+            const len = results.rows.length;
+            if (len > 0) {
+              user = results.rows.item(0).Email;
+              setEmail(email);
+              setPassword(password);
+              setIsAuth(isAuth);
+              console.log('Is Auth?: ' + isAuth);
+            }
+          },
+        );
+      });
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -53,16 +140,24 @@ export default function LoginScreen() {
           contentContainerStyle={containerStyle}
           style={{padding: 25}}
           onDismiss={hideModal}>
-          <LoginComponent placeholder="you@example.com" />
-          <LoginComponent placeholder="your password" />
-          <LoginComponent placeholder="your username" />
-          <Mybutton title="SIGN UP" />
+          <LoginComponent
+            onChangeText={email => setEmail(email)}
+            placeholder="you@example.com"
+          />
+          <LoginComponent
+            secureTextEntry={true}
+            onChangeText={password => setPassword(password)}
+            placeholder="your password"
+          />
+          {/* <LoginComponent placeholder="your first name" />
+          <LoginComponent placeholder="your last name" /> */}
+          <Mybutton title="SIGN UP" customClick={regUser} />
         </Modal>
       </Portal>
       {/* <View style={styles.container_log}> */}
-      <LoginComponent placeholder="Email" />
-      <LoginComponent placeholder="Password" />
-      <Mybutton title="LOGIN" customClick={reg_user} />
+      <LoginComponent placeholder="Email" onChangeText={email => setEmail()} />
+      <LoginComponent placeholder="Password" secureTextEntry={true} />
+      <Mybutton title="LOGIN" />
       <TouchableOpacity onPress={showModal}>
         <Text style={styles.reg_button}>No Account? Register</Text>
       </TouchableOpacity>

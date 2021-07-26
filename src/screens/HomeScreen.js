@@ -13,8 +13,6 @@ import URLparser from '../components/URLparser';
 
 export default function HomeScreen(props) {
   const [posts, setPosts] = useState([]);
-  // const [loading, setLoading] = useState(false);
-  // const [isEnd, setIsEnd] = useState(false);
 
   const {height} = useWindowDimensions();
 

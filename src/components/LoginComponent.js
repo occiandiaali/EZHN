@@ -8,12 +8,18 @@ import {
   View,
 } from 'react-native';
 
-export default function LoginComponent({text, placeholder, onChangeText}) {
+export default function LoginComponent({
+  text,
+  placeholder,
+  onChangeText,
+  secureTextEntry,
+}) {
   return (
     <View style={styles.inputView}>
       <TextInput
         style={styles.inputText}
         value={text}
+        secureTextEntry={secureTextEntry}
         placeholder={placeholder}
         placeholderTextColor="#003f5c"
         onChangeText={onChangeText}

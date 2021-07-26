@@ -10,6 +10,9 @@ import SplashScreen from './src/screens/SplashScreen';
 import CustomNava from './src/components/CustomNava';
 import LoginScreen from './src/screens/LoginScreen';
 import SettingsScreen from './src/screens/SettingsScreen';
+import ProfileScreen from './src/screens/ProfileScreen';
+import UserCreds from './src/auth/UserCreds';
+import {Image} from 'react-native';
 
 const Stack = createStackNavigator();
 
@@ -28,6 +31,7 @@ export default function App() {
         initialRouteName="Splash"
         screenOptions={{
           headerStyle: {
+            elevation: 3,
             backgroundColor: '#f4511e',
             borderBottomLeftRadius: 15,
             borderBottomRightRadius: 15,
@@ -41,7 +45,7 @@ export default function App() {
         }}>
         <Stack.Screen
           name="Accounts"
-          component={LoginScreen}
+          component={UserCreds}
           options={{
             title: 'Accounts',
           }}
@@ -52,6 +56,12 @@ export default function App() {
           options={{
             title: 'Easy Hacker News',
             headerRight: () => <CustomNava />,
+            headerLeft: () => (
+              <Image
+                style={{width: 50, height: 50, marginLeft: 13}}
+                source={require('./src/res/images/ehn_logo.png')}
+              />
+            ),
           }}
         />
         <Stack.Screen
@@ -77,6 +87,11 @@ export default function App() {
           name="Settings"
           component={SettingsScreen}
           options={{title: 'Settings'}}
+        />
+        <Stack.Screen
+          name="Profile"
+          component={ProfileScreen}
+          options={{title: 'Profile'}}
         />
       </Stack.Navigator>
     </NavigationContainer>

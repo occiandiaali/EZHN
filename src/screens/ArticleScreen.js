@@ -17,6 +17,7 @@ const ArticleScreen = props => {
 
   return article.url !== undefined ? (
     <WebView
+      showsVerticalScrollIndicator={false}
       originWhitelist={['*']}
       renderLoading={LoadingIndicatorView}
       source={{uri: article.url}}
