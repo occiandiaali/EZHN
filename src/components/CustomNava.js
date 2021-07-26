@@ -40,10 +40,10 @@ export default function CustomNava() {
       <Divider />
       <Menu.Item
         onPress={() => {
-          linkTo('/Login');
+          linkTo('/Accounts');
           closeMenu();
         }}
-        title="Login"
+        title="Accounts"
       />
     </Menu>
     // <TouchableOpacity onPress={() => linkTo('/Login')}>

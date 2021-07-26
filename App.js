@@ -40,7 +40,7 @@ export default function App() {
           headerTitleAlign: 'center',
         }}>
         <Stack.Screen
-          name="Login"
+          name="Accounts"
           component={LoginScreen}
           options={{
             title: 'Accounts',
