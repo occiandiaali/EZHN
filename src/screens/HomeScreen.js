@@ -13,8 +13,8 @@ import URLparser from '../components/URLparser';
 
 export default function HomeScreen(props) {
   const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [isEnd, setIsEnd] = useState(false);
+  // const [loading, setLoading] = useState(false);
+  // const [isEnd, setIsEnd] = useState(false);
 
   const {height} = useWindowDimensions();
 
@@ -62,19 +62,6 @@ export default function HomeScreen(props) {
       console.log(`Top Count: ${result.length}`);
     } catch (error) {
       console.error(error);
-    }
-  };
-
-  const getStories = () => {
-    if (!loading && !isEnd) {
-      setLoading(true);
-      getTopStories();
-      setLoading(false);
-    }
-    if (loading && isEnd) {
-      setIsEnd(true);
-      getNewStories();
-      setLoading(false);
     }
   };
 
