@@ -9,6 +9,7 @@ import {
 
 import {Separator} from '../components/Separator';
 import {LoadingIndicatorView} from '../components/LoadingIndicatorView';
+import URLparser from '../components/URLparser';
 
 export default function HomeScreen(props) {
   const [posts, setPosts] = useState([]);
@@ -83,9 +84,8 @@ export default function HomeScreen(props) {
 
   const handleItemPress = article =>
     props.navigation.navigate('Article', {article});
-
   return (
-    <FlatList
+    <FlatList // TODO: timestamp, align URL
       data={posts}
       keyExtractor={item => item.id}
       ItemSeparatorComponent={Separator}
@@ -95,9 +95,14 @@ export default function HomeScreen(props) {
             style={styles.listItem}
             onPress={() => handleItemPress(postInfo.item)}>
             <Text style={styles.title}>{postInfo.item.title}</Text>
+            {postInfo.item.url !== undefined ? (
+              <URLparser url={postInfo.item.url} />
+            ) : (
+              <Text style={styles.sub}>(no link)</Text>
+            )}
             <Text style={styles.sub}>
-              {postInfo.item.score} pts | {postInfo.item.descendants} comments |
-              by {postInfo.item.by}
+              {postInfo.item.score} pts by {postInfo.item.by} 2 hours ago |{' '}
+              {postInfo.item.descendants} comments
             </Text>
           </TouchableOpacity>
         ) : (
