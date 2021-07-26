@@ -6,20 +6,42 @@ import {
   View,
   Image,
   Text,
+  Alert,
+  KeyboardAvoidingView,
 } from 'react-native';
+
+import {openDatabase} from 'react-native-sqlite-storage';
+import LoginComponent from '../components/LoginComponent';
+import Mybutton from '../components/Mybutton';
+
+//const db = openDatabase({name: 'UserDB.db'});
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const reg_user = () => {
+    if (!email || !password) {
+      Alert.alert('Fields required', 'We need ALL fields!');
+      return;
+    }
+  };
+
   return (
-    <>
-      <View style={styles.container_log}>
-        <Image
-          style={styles.image}
-          source={require('../res/images/ehn_logo.png')}
-          accessibilityLabel="Easy Hacker News"
-        />
-        <View style={styles.inputView}>
+    <KeyboardAvoidingView style={styles.container} behavior="padding">
+      <Image
+        style={styles.image}
+        source={require('../res/images/ehn_logo.png')}
+        accessibilityLabel="Easy Hacker News"
+      />
+      {/* <View style={styles.container_log}> */}
+      <LoginComponent placeholder="you@emailaddress.com" />
+      <LoginComponent placeholder="your password" />
+      <Mybutton title="LOGIN" customClick={reg_user} />
+      <TouchableOpacity onPress={reg_user}>
+        <Text style={styles.reg_button}>No Account? Register</Text>
+      </TouchableOpacity>
+      {/* <View style={styles.inputView}>
           <TextInput
             style={styles.TextInput}
             placeholder="you@emailaddress.com"
@@ -35,11 +57,11 @@ export default function LoginScreen() {
             secureTextEntry={true}
             onChangeText={password => setPassword(password)}
           />
-        </View>
-        {/* <TouchableOpacity>
+        </View> */}
+      {/* <TouchableOpacity>
           <Text style={styles.reg_button}>No Account? Register</Text>
         </TouchableOpacity> */}
-        <TouchableOpacity style={styles.loginBtn}>
+      {/* <TouchableOpacity style={styles.loginBtn}>
           <Text style={styles.loginText}>LOGIN</Text>
         </TouchableOpacity>
       </View>
@@ -63,19 +85,25 @@ export default function LoginScreen() {
             onChangeText={password => setPassword(password)}
           />
         </View>
-        <TouchableOpacity style={styles.loginBtn}>
+        <TouchableOpacity style={styles.loginBtn} onPress={reg_user}>
           <Text style={styles.regText}>SIGN UP</Text>
-        </TouchableOpacity>
-      </View>
-    </>
+        </TouchableOpacity> */}
+      {/* </View> */}
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
-  container_log: {
+  container: {
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 40,
+    marginBottom: 10,
+  },
+  container_log: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    // marginTop: 40,
     marginBottom: 20,
   },
   container_reg: {
@@ -85,8 +113,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   image: {
-    width: 100,
-    height: 100,
+    width: 150,
+    height: 150,
     marginBottom: 35,
   },
   inputView: {
@@ -111,8 +139,9 @@ const styles = StyleSheet.create({
     fontSize: 26,
   },
   reg_button: {
+    fontSize: 20,
     height: 30,
-    marginBottom: 30,
+    marginTop: 30,
   },
   regText: {
     fontWeight: 'bold',
