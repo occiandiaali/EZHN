@@ -10,6 +10,8 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 
+import {Modal, Portal} from 'react-native-paper';
+
 import {openDatabase} from 'react-native-sqlite-storage';
 import LoginComponent from '../components/LoginComponent';
 import Mybutton from '../components/Mybutton';
@@ -19,6 +21,17 @@ import Mybutton from '../components/Mybutton';
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isModalVisible, setModalVisible] = useState(false);
+  const showModal = () => setModalVisible(true);
+  const hideModal = () => setModalVisible(false);
+  const containerStyle = {
+    width: '100%',
+    height: '60%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    padding: 25,
+  };
 
   const reg_user = () => {
     if (!email || !password) {
@@ -34,11 +47,23 @@ export default function LoginScreen() {
         source={require('../res/images/ehn_logo.png')}
         accessibilityLabel="Easy Hacker News"
       />
+      <Portal>
+        <Modal
+          visible={isModalVisible}
+          contentContainerStyle={containerStyle}
+          style={{padding: 25}}
+          onDismiss={hideModal}>
+          <LoginComponent placeholder="you@example.com" />
+          <LoginComponent placeholder="your password" />
+          <LoginComponent placeholder="your username" />
+          <Mybutton title="SIGN UP" />
+        </Modal>
+      </Portal>
       {/* <View style={styles.container_log}> */}
-      <LoginComponent placeholder="you@emailaddress.com" />
-      <LoginComponent placeholder="your password" />
+      <LoginComponent placeholder="Email" />
+      <LoginComponent placeholder="Password" />
       <Mybutton title="LOGIN" customClick={reg_user} />
-      <TouchableOpacity onPress={reg_user}>
+      <TouchableOpacity onPress={showModal}>
         <Text style={styles.reg_button}>No Account? Register</Text>
       </TouchableOpacity>
       {/* <View style={styles.inputView}>
