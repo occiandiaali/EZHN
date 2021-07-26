@@ -21,8 +21,8 @@ export default function App() {
         screenOptions={{
           headerStyle: {
             backgroundColor: '#f4511e',
-            borderBottomLeftRadius: 17,
-            borderBottomRightRadius: 17,
+            borderBottomLeftRadius: 15,
+            borderBottomRightRadius: 15,
           },
           headerTintColor: '#fff',
           headerTitleStyle: {
