@@ -1,12 +1,47 @@
-import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import React, {useState, useEffect, useRef} from 'react';
+import {StyleSheet, Image, Animated, View} from 'react-native';
 
-export default function SplashScreen() {
+export default function SplashScreen({navigation}) {
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 3000,
+      useNativeDriver: true,
+    }).start();
+
+    setTimeout(() => {
+      navigation.replace('Home');
+    }, 5000);
+  }, []);
+
+  const spin = fadeAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '360deg'],
+  });
+
   return (
-    <View>
-      <Text></Text>
+    <View style={styles.container}>
+      <Animated.Image
+        source={require('../res/images/ehn_logo.png')}
+        style={{
+          width: '90%',
+          resizeMode: 'contain',
+          margin: 30,
+          transform: [{rotate: spin}],
+        }}
+      />
     </View>
   );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    // backgroundColor: '#307ecc',
+    backgroundColor: '#fff',
+  },
+});
