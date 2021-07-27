@@ -1,6 +1,8 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {NavigationContainer, DefaultTheme} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
+import {Image, Text} from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import HomeScreen from './src/screens/HomeScreen';
 import AboutMeScreen from './src/screens/AboutMeScreen';
@@ -12,7 +14,6 @@ import LoginScreen from './src/screens/LoginScreen';
 import SettingsScreen from './src/screens/SettingsScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
 import UserCreds from './src/auth/UserCreds';
-import {Image} from 'react-native';
 
 const Stack = createStackNavigator();
 
@@ -55,13 +56,13 @@ export default function App() {
           component={HomeScreen}
           options={{
             title: 'Easy Hacker News',
-            headerRight: () => <CustomNava />,
             headerLeft: () => (
               <Image
                 style={{width: 50, height: 50, marginLeft: 13}}
                 source={require('./src/res/images/ehn_logo.png')}
               />
             ),
+            //  headerRight: () => (isAuthed ? <MenuAuth /> : <MenuNotAuth />),
           }}
         />
         <Stack.Screen

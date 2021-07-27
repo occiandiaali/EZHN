@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -6,16 +6,32 @@ import {
   KeyboardAvoidingView,
   Image,
   Alert,
+  Platform,
 } from 'react-native';
 
 import {TextInput, Button, Divider, Modal, Portal} from 'react-native-paper';
 
-export default function UserCreds() {
+import {openDatabase} from 'react-native-sqlite-storage';
+
+// open the db
+const db = openDatabase(
+  {
+    name: 'UserDB',
+    location: 'default',
+  },
+  () => {},
+  error => {
+    console.log(error);
+  },
+);
+
+export default function UserCreds({navigation}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [userEmail, setUserEmail] = useState(email);
   const [userPassword, setUserPassword] = useState(password);
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [isAuth, setIsAuth] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
   const showModal = () => setModalVisible(true);
   const hideModal = () => setModalVisible(false);
@@ -27,25 +43,108 @@ export default function UserCreds() {
     padding: 25,
   };
 
+  // create db users table
+  const createTable = () => {
+    db.transaction(txn => {
+      txn.executeSql(
+        'CREATE TABLE IF NOT EXISTS Users (ID INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, password TEXT);',
+      );
+    });
+  };
+
+  useEffect(() => {
+    createTable();
+    console.log(`Is Authed: ${isAuth}`);
+  }, []);
+
   // Authentication methods - for Login and Register
-  const userLogin = () => {
+  const userLogin = async () => {
     if (!userEmail || !userPassword) {
       Alert.alert('Empty Field(s)', 'All fields are required.');
       return;
     }
+    await db.transaction(txn => {
+      txn.executeSql(
+        'SELECT email, password FROM Users',
+        [],
+        (txn, results) => {
+          const len = results.rows.length;
+          if (!len) {
+            Alert.alert('Attention', 'This account does not exist!');
+          }
+          if (len > 0) {
+            const row = results.rows.item(0);
+            if (userPassword === row.password) {
+              setIsAuth(!isAuth);
+              console.log(`Login auth: ${isAuth}`);
+              navigation.navigate('Home', {k: 'true'});
+            } else {
+              Alert.alert('Alert!', 'Authentication Failed!');
+            }
+          }
+        },
+      );
+    });
   };
 
-  const userRegister = () => {
+  const userRegister = async () => {
     if (!email || !password) {
-      Alert.alert('Attention', 'Complete ALL fields!');
+      Alert.alert('Attention!', 'Complete ALL fields!');
       return;
+    }
+    if (confirmPassword !== password) {
+      Alert.alert('Attention!', 'Passwords do not match!');
+      return;
+    }
+    try {
+      await db.transaction(txn => {
+        txn.executeSql(
+          'SELECT * FROM Users WHERE email= ?',
+          [email],
+          (txn, results) => {
+            const len = results.rows.length;
+            if (len > 0) {
+              Alert.alert('Hey!', 'Account already exists! :( ');
+              return;
+            } else {
+              'INSERT INTO Users (email, password) VALUES (?, ?)',
+                [email, password],
+                (txn, results) => {
+                  const len = results.rows.length;
+                  if (results.rowsAffected > 0) {
+                    Alert.alert('Success!', 'You are now registered!');
+                  } else {
+                    Alert.alert('Oops!', 'Error: Could not register you! :( ');
+                  }
+                };
+            }
+          },
+        );
+        // txn.executeSql(
+        //   'INSERT INTO Users (email, password) VALUES (?, ?)',
+        //   [email, password],
+        //   (txn, results) => {
+        //     const len = results.rows.length;
+        //     if (results.rowsAffected > 0) {
+        //       Alert.alert('Success!', 'You are now registered!');
+        //     } else {
+        //       Alert.alert('Oops!', 'Error: Could not register you! :( ');
+        //     }
+        //   },
+        // );
+      });
+      setIsAuth(!isAuth);
+      navigation.navigate('Home', {k: 'true'});
+    } catch (error) {
+      console.log(`DB Insertion err: ${error} `);
     }
   };
 
   // ============================================
 
   return (
-    <KeyboardAvoidingView behavior="padding">
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <Image
         style={styles.image}
         source={require('../res/images/ehn_logo.png')}
@@ -55,26 +154,23 @@ export default function UserCreds() {
         <Modal
           visible={isModalVisible}
           contentContainerStyle={containerStyle}
-          // style={{padding: 25}}
           onDismiss={hideModal}>
           <TextInput
             label="Email"
             value={email}
-            onChangeText={email => setEmail(email)}
+            onChangeText={value => setEmail(value)}
           />
           <TextInput
             label="Password"
             value={password}
             secureTextEntry={true}
-            onChangeText={password => setPassword(password)}
+            onChangeText={value => setPassword(value)}
           />
           <TextInput
             label="Confirm Password"
             value={confirmPassword}
             secureTextEntry={true}
-            onChangeText={confirmPassword =>
-              setConfirmPassword(confirmPassword)
-            }
+            onChangeText={value => setConfirmPassword(value)}
           />
           <Button
             style={{
@@ -94,13 +190,13 @@ export default function UserCreds() {
         style={{marginTop: 35}}
         label="Email"
         value={userEmail}
-        onChangeText={userEmail => setUserEmail(userEmail)}
+        onChangeText={value => setUserEmail(value)}
       />
       <TextInput
         label="Password"
         value={userPassword}
         secureTextEntry={true}
-        onChangeText={userPassword => setUserPassword(userPassword)}
+        onChangeText={value => setUserPassword(value)}
       />
       <Button
         style={{

@@ -28,7 +28,7 @@ export default function SettingsScreen() {
         <List.Subheader>App Settings</List.Subheader>
         <List.Item
           title="Dark Mode"
-          left={() => <List.Icon icon="star-circle" />}
+          left={() => <List.Icon icon="brightness-6" />}
         />
         <List.Item title="Dark Mode" left={() => <List.Icon icon="folder" />} />
       </List.Section>

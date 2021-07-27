@@ -6,9 +6,8 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {Button, Divider, Menu} from 'react-native-paper';
 
-export default function CustomNava() {
+export default function MenuAuth() {
   const [visible, setVisible] = useState(false);
-  const [isAuth, setIsAuth] = useState(false);
 
   const openMenu = () => setVisible(true);
   const closeMenu = () => setVisible(false);
@@ -38,23 +37,20 @@ export default function CustomNava() {
         title="Settings"
       />
       <Divider />
-      {isAuth ? (
-        <Menu.Item
-          onPress={() => {
-            linkTo('/Profile');
-            closeMenu();
-          }}
-          title="Profile"
-        />
-      ) : (
-        <Menu.Item
-          onPress={() => {
-            linkTo('/Accounts');
-            closeMenu();
-          }}
-          title="Accounts"
-        />
-      )}
+      <Menu.Item
+        onPress={() => {
+          linkTo('/Profile');
+          closeMenu();
+        }}
+        title="Profile"
+      />
+      <Menu.Item
+        onPress={() => {
+          console.log('Signed Out');
+          closeMenu();
+        }}
+        title="Sign Out"
+      />
     </Menu>
   );
 }
