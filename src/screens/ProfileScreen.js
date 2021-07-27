@@ -7,12 +7,16 @@ import {openDatabase} from 'react-native-sqlite-storage';
 
 const db = openDatabase({name: 'UserDB.db'});
 
-export default function ProfileScreen({navigation}) {
+export default function ProfileScreen({route, navigation}) {
   let [inputUID, setUID] = useState('');
 
   const [isSwitchOn, setIsSwitchOn] = useState(false);
 
   const onToggleSwitch = () => setIsSwitchOn(!isSwitchOn);
+
+  const {user} = route.params || '';
+
+  //let usermail = JSON.stringify(user);
 
   const deleteUser = () => {
     db.transaction(tx => {
@@ -46,7 +50,7 @@ export default function ProfileScreen({navigation}) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>User Profile</Text>
+      <Text style={styles.label}>{user.replace(/['"]+/g, '')}</Text>
       <List.Section>
         <List.Subheader>User Settings</List.Subheader>
         <List.Item title="Feature 1" left={() => <List.Icon icon="folder" />} />
@@ -55,7 +59,7 @@ export default function ProfileScreen({navigation}) {
 
       <Divider
         style={{
-          width: '80%',
+          width: '95%',
           height: 1,
           alignSelf: 'center',
           backgroundColor: 'gray',
@@ -73,7 +77,7 @@ export default function ProfileScreen({navigation}) {
 
       <Divider
         style={{
-          width: '80%',
+          width: '95%',
           height: 1,
           alignSelf: 'center',
           backgroundColor: 'gray',
@@ -84,14 +88,7 @@ export default function ProfileScreen({navigation}) {
         <Text style={{marginRight: 25, fontSize: 17}}>Dark Mode</Text>
         <Switch value={isSwitchOn} onValueChange={onToggleSwitch} />
       </View>
-      <Divider
-        style={{
-          width: '80%',
-          height: 1,
-          alignSelf: 'center',
-          backgroundColor: 'gray',
-        }}
-      />
+
       <List.Section>
         <List.Item title="Log Out" left={() => <List.Icon icon="logout" />} />
       </List.Section>
@@ -104,8 +101,8 @@ const styles = StyleSheet.create({
     padding: 32,
   },
   label: {
-    fontSize: 27,
-    fontWeight: 'bold',
+    fontSize: 19,
+    color: 'gray',
   },
   btn: {
     width: '50%',

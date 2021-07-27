@@ -123,7 +123,9 @@ export default function HomeScreen({route, navigation}) {
               icon="account-cog-outline"
               color="black"
               size={27}
-              onPress={() => navigation.navigate('Profile')}
+              onPress={() =>
+                navigation.navigate('Profile', {user: authenticated})
+              }
             />
             {/* <Appbar.Action
               icon="logout"
