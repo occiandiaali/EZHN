@@ -92,7 +92,8 @@ export default function HomeScreen({route, navigation}) {
                 <Text style={styles.sub}>(no link)</Text>
               )}
               <Text style={styles.sub}>
-                {postInfo.item.score} pts by {postInfo.item.by} 2 hours ago |{' '}
+                {postInfo.item.score} pts by {postInfo.item.by}{' '}
+                {new Date(postInfo.item.time * 1000).getMinutes()} mins ago |{' '}
                 {postInfo.item.descendants} comments
               </Text>
             </TouchableOpacity>
@@ -124,12 +125,12 @@ export default function HomeScreen({route, navigation}) {
               size={27}
               onPress={() => navigation.navigate('Profile')}
             />
-            <Appbar.Action
+            {/* <Appbar.Action
               icon="logout"
               color="black"
               size={27}
               onPress={() => console.log('Pressed logout')}
-            />
+            /> */}
           </>
         ) : (
           <Appbar.Action
