@@ -49,8 +49,8 @@ export default function ProfileScreen({navigation}) {
       <Text style={styles.label}>User Profile</Text>
       <List.Section>
         <List.Subheader>User Settings</List.Subheader>
-        <List.Item title="Dark Mode" left={() => <List.Icon icon="folder" />} />
-        <List.Item title="Dark Mode" left={() => <List.Icon icon="folder" />} />
+        <List.Item title="Feature 1" left={() => <List.Icon icon="folder" />} />
+        <List.Item title="Feature 2" left={() => <List.Icon icon="folder" />} />
       </List.Section>
 
       <Divider
@@ -65,10 +65,10 @@ export default function ProfileScreen({navigation}) {
       <List.Section>
         <List.Subheader>App Settings</List.Subheader>
         <List.Item
-          title="Dark Mode"
+          title="Contrasts"
           left={() => <List.Icon icon="brightness-6" />}
         />
-        <List.Item title="Dark Mode" left={() => <List.Icon icon="folder" />} />
+        <List.Item title="Memories" left={() => <List.Icon icon="folder" />} />
       </List.Section>
 
       <Divider
@@ -95,10 +95,6 @@ export default function ProfileScreen({navigation}) {
       <List.Section>
         <List.Item title="Log Out" left={() => <List.Icon icon="logout" />} />
       </List.Section>
-
-      {/* <TouchableOpacity style={styles.btn} onPress={deleteUser}>
-        <Text style={styles.btnLabel}>Logout</Text>
-      </TouchableOpacity> */}
     </View>
   );
 }
