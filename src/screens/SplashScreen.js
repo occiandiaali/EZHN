@@ -7,13 +7,13 @@ export default function SplashScreen({navigation}) {
   useEffect(() => {
     Animated.timing(fadeAnim, {
       toValue: 1,
-      duration: 3000,
+      duration: 5000,
       useNativeDriver: true,
     }).start();
 
     setTimeout(() => {
       navigation.replace('Home');
-    }, 5000);
+    }, 7000);
   }, []);
 
   const spin = fadeAnim.interpolate({
