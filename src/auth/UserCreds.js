@@ -43,7 +43,7 @@ export default function UserCreds({navigation}) {
     padding: 25,
   };
 
-  // create db users table
+  //create db users table
   const createTable = () => {
     db.transaction(txn => {
       txn.executeSql(

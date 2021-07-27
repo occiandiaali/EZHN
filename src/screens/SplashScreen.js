@@ -1,8 +1,31 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {StyleSheet, Image, Animated, View} from 'react-native';
 
+// import {openDatabase} from 'react-native-sqlite-storage';
+
+// // open the db
+// const db = openDatabase(
+//   {
+//     name: 'UserDB',
+//     location: 'default',
+//   },
+//   () => {},
+//   error => {
+//     console.log(error);
+//   },
+// );
+
 export default function SplashScreen({navigation}) {
   const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  // create db users table
+  // const createTable = () => {
+  //   db.transaction(txn => {
+  //     txn.executeSql(
+  //       'CREATE TABLE IF NOT EXISTS Users (ID INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, password TEXT);',
+  //     );
+  //   });
+  // };
 
   useEffect(() => {
     Animated.timing(fadeAnim, {
