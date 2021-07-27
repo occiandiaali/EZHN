@@ -93,8 +93,8 @@ export default function HomeScreen({route, navigation}) {
               )}
               <Text style={styles.sub}>
                 {postInfo.item.score} pts by {postInfo.item.by}{' '}
-                {new Date(postInfo.item.time * 1000).getMinutes()} mins ago |{' '}
-                {postInfo.item.descendants} comments
+                {new Date((postInfo.item.time * 1000) / 60).getMinutes()} mins
+                ago | {postInfo.item.descendants} comments
               </Text>
             </TouchableOpacity>
           ) : (
