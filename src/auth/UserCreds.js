@@ -54,7 +54,7 @@ export default function UserCreds({navigation}) {
 
   useEffect(() => {
     createTable();
-    console.log(`Is Authed: ${isAuth}`);
+    // console.log(`Is Authed: ${isAuth}`);
   }, []);
 
   // Authentication methods - for Login and Register
@@ -75,9 +75,11 @@ export default function UserCreds({navigation}) {
           if (len > 0) {
             const row = results.rows.item(0);
             if (userPassword === row.password) {
-              setIsAuth(!isAuth);
-              console.log(`Login auth: ${isAuth}`);
-              navigation.navigate('Home', {k: 'true'});
+              setIsAuth(isAuth);
+              // console.log(`Is Authed?: ${isAuth}`);
+              setUserEmail(userEmail);
+              console.log(`User Email: ${userEmail}`);
+              navigation.navigate('Home', {umail: userEmail});
             } else {
               Alert.alert('Alert!', 'Authentication Failed!');
             }
@@ -110,7 +112,7 @@ export default function UserCreds({navigation}) {
               'INSERT INTO Users (email, password) VALUES (?, ?)',
                 [email, password],
                 (txn, results) => {
-                  const len = results.rows.length;
+                  // const len = results.rows.length;
                   if (results.rowsAffected > 0) {
                     Alert.alert('Success!', 'You are now registered!');
                   } else {
@@ -120,21 +122,13 @@ export default function UserCreds({navigation}) {
             }
           },
         );
-        // txn.executeSql(
-        //   'INSERT INTO Users (email, password) VALUES (?, ?)',
-        //   [email, password],
-        //   (txn, results) => {
-        //     const len = results.rows.length;
-        //     if (results.rowsAffected > 0) {
-        //       Alert.alert('Success!', 'You are now registered!');
-        //     } else {
-        //       Alert.alert('Oops!', 'Error: Could not register you! :( ');
-        //     }
-        //   },
-        // );
       });
-      setIsAuth(!isAuth);
-      navigation.navigate('Home', {k: 'true'});
+      // setIsAuth(isAuth);
+      // console.log(`Is RegAuthed?: ${isAuth}`);
+      setEmail(email);
+      setPassword(password);
+      console.log(`email: ${email} - pass: ${password}`);
+      navigation.navigate('Home', {umail: email});
     } catch (error) {
       console.log(`DB Insertion err: ${error} `);
     }
@@ -143,8 +137,7 @@ export default function UserCreds({navigation}) {
   // ============================================
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+    <KeyboardAvoidingView behavior="padding">
       <Image
         style={styles.image}
         source={require('../res/images/ehn_logo.png')}
@@ -155,22 +148,18 @@ export default function UserCreds({navigation}) {
           visible={isModalVisible}
           contentContainerStyle={containerStyle}
           onDismiss={hideModal}>
-          <TextInput
-            label="Email"
-            value={email}
-            onChangeText={value => setEmail(value)}
-          />
+          <TextInput label="Email" onChangeText={email => setEmail(email)} />
           <TextInput
             label="Password"
-            value={password}
             secureTextEntry={true}
-            onChangeText={value => setPassword(value)}
+            onChangeText={password => setPassword(password)}
           />
           <TextInput
             label="Confirm Password"
-            value={confirmPassword}
             secureTextEntry={true}
-            onChangeText={value => setConfirmPassword(value)}
+            onChangeText={confirmPassword =>
+              setConfirmPassword(confirmPassword)
+            }
           />
           <Button
             style={{
@@ -189,14 +178,12 @@ export default function UserCreds({navigation}) {
       <TextInput
         style={{marginTop: 35}}
         label="Email"
-        value={userEmail}
-        onChangeText={value => setUserEmail(value)}
+        onChangeText={userEmail => setUserEmail(userEmail)}
       />
       <TextInput
         label="Password"
-        value={userPassword}
         secureTextEntry={true}
-        onChangeText={value => setUserPassword(value)}
+        onChangeText={userPassword => setUserPassword(userPassword)}
       />
       <Button
         style={{

@@ -12,9 +12,9 @@ export default function HomeScreen({route, navigation}) {
   const [posts, setPosts] = useState([]);
   const [isSignedIn, setIsSignedIn] = useState(false);
 
-  //const {authParam} = route.params;
+  const {umail} = route.params || '';
 
-  //let authenticated = JSON.stringify(route.params.paramKey);
+  let authenticated = JSON.stringify(umail);
 
   const getNewStories = async () => {
     const tops = 'https://hacker-news.firebaseio.com/v0/newstories.json';
@@ -34,7 +34,6 @@ export default function HomeScreen({route, navigation}) {
       const result = await Promise.all(promises);
       setPosts(result);
       console.log(`New Count: ${result.length}`);
-      console.log(`Height: ${height}`);
     } catch (error) {
       console.error(error);
     }
@@ -65,12 +64,13 @@ export default function HomeScreen({route, navigation}) {
 
   useEffect(() => {
     getTopStories();
-    // console.log(`Param: ${auther}`);
-    // console.log(`Type of authenticated: ${typeof auther}`);
+    console.log(`Param: ${authenticated}`);
+    console.log(`Type of authenticated: ${typeof authenticated}`);
+    // console.log(`Authed: ${authe}`);
+    // console.log(`Type of Authed: ${typeof authe}`);
   }, []);
 
-  const handleItemPress = article =>
-    props.navigation.navigate('Article', {article});
+  const handleItemPress = article => navigation.navigate('Article', {article});
 
   return (
     <View>
@@ -107,30 +107,34 @@ export default function HomeScreen({route, navigation}) {
       <Appbar style={styles.bottom}>
         <Appbar.Action
           icon="information-outline"
-          size={30}
+          size={27}
           onPress={() => navigation.navigate('About')}
         />
-        <Appbar.Action icon="delete" size={30} />
+        {/* <Appbar.Action
+          icon="delete"
+          onPress={() => console.log('Pressed delete')}
+          size={27}
+        /> */}
 
-        {!isSignedIn ? (
+        {authenticated ? (
           <>
             <Appbar.Action
               icon="account-cog-outline"
               color="black"
-              size={30}
+              size={27}
               onPress={() => navigation.navigate('Profile')}
             />
             <Appbar.Action
               icon="logout"
               color="black"
-              size={30}
+              size={27}
               onPress={() => console.log('Pressed logout')}
             />
           </>
         ) : (
           <Appbar.Action
             icon="login"
-            size={30}
+            size={27}
             onPress={() => navigation.navigate('Accounts')}
           />
         )}
@@ -147,7 +151,6 @@ const styles = StyleSheet.create({
     bottom: 0,
     borderTopRightRadius: 15,
     borderTopLeftRadius: 15,
-    // backgroundColor: '#d4961f',
     backgroundColor: '#ee6c00',
   },
   listItem: {
